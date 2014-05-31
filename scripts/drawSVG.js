@@ -36,6 +36,7 @@ SVG_Element.prototype.addChild = function(tag, attr, children) {
 // A rect element
 // Requires x, y, width and height attributes
 SVG_Element.prototype.rect = function(x, y, width, height, attr) {
+    var attr = attr || {};
     attr.x = x;
     attr.y = y;
     attr.width = width;
@@ -47,11 +48,36 @@ SVG_Element.prototype.rect = function(x, y, width, height, attr) {
 // A circle element
 // Requires cx, cy, r attributes
 SVG_Element.prototype.circle = function(cx, cy, r, attr) {
+    var attr = attr || {};
     attr.cx = cx;
     attr.cy = cy;
     attr.r = r;
 
     return this.addChild('circle', attr);
+};
+
+// An ellipse element
+// Requires cx, cy, rx, ry attributes
+SVG_Element.prototype.ellipse = function(cx, cy, rx, ry, attr) {
+    var attr = attr || {};
+    attr.cx = cx;
+    attr.cy = cy;
+    attr.rx = rx;
+    attr.ry = ry;
+
+    return this.addChild('ellipse', attr);
+};
+
+// An ellipse element
+// Requires x1, y1, x2, y2 attributes
+SVG_Element.prototype.line = function(x1, y1, x2, y2, attr) {
+    var attr = attr || {};
+    attr.x1 = x1;
+    attr.y1 = y1;
+    attr.x2 = x2;
+    attr.y2 = y2;
+
+    return this.addChild('line', attr);
 };
 
 // SVG is a special type of SVG element
