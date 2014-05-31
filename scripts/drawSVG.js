@@ -52,29 +52,33 @@ var SVG = function(attr) {
 
 SVG.prototype = Object.create(SVG_Element.prototype);
 
-// Draw SVG inside the element with the given ID
-var testDrawSVG = function(id) {
-    var $container = $('#' + id);
+// Finds element selected by a given selector
+// Empties them and then draw the SVG inside them
+SVG.prototype.show = function(selector) {
+    var $container = $(selector);
 
     if (!($container)){
-        console.log("Unable to to find element with id " + id);
+        console.log("No elements found using the selector: '" + selector + "'");
         return;
     }
 
     $container.empty();
 
+    this.draw($container);
+    // Hack to reload the SVG
+    $container.html($container.html());
+};
+
+var testDrawSVG = function(id) {
     // Create SVG
     var mySVG = new SVG({ width: 400, height: 200 });
 
     mySVG.rect(100, 50, 200, 100, { fill: '#88f' });
     mySVG.rect(100, 50, 50, 50, { fill: '#8ff' });
 
-    mySVG.draw($container);
-
-    // Hack to reload the SVG
-    $container.html($container.html());
+    mySVG.show('#mySVG');
 }
 
 $(document).ready(function() {
-    testDrawSVG('mySVG');
+    testDrawSVG();
 });
