@@ -24,9 +24,23 @@ SVG_Element.prototype.draw = function(parent) {
 SVG_Element.prototype.addChild = function(tag, attr, children) {
     var element = new SVG_Element(tag, attr, children);
     this.children.push(element);
-}
+};
 
-// SVG is a type of SVG element
+// Specific SVG elements.
+// Allows elements to be created with less effort
+
+// A rect element
+// Requires x, y, width and height attributes
+SVG_Element.prototype.rect = function(x, y, width, height, attr) {
+    attr.x = x;
+    attr.y = y;
+    attr.width = width;
+    attr.height = height;
+
+    this.children.push(new SVG_Element('rect', attr));
+};
+
+// SVG is a special type of SVG element
 var SVG = function(attr) {
     this.tag = 'svg';
 
@@ -52,8 +66,8 @@ var testDrawSVG = function(id) {
     // Create SVG
     var mySVG = new SVG({ width: 400, height: 200 });
 
-    mySVG.addChild('rect', { x: 100, y: 50, width: 200, height: 100, fill: '#88f' });
-    mySVG.addChild('rect', { x: 100, y: 50, width: 50, height: 50, fill: '#8ff' });
+    mySVG.rect(100, 50, 200, 100, { fill: '#88f' });
+    mySVG.rect(100, 50, 50, 50, { fill: '#8ff' });
 
     mySVG.draw($container);
 
