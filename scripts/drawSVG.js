@@ -27,6 +27,7 @@ SVG_Element.prototype.draw = function(parent) {
 SVG_Element.prototype.addChild = function(tag, attr, children) {
     var element = new SVG_Element(tag, attr, children);
     this.children.push(element);
+    return element;
 };
 
 // Specific SVG elements.
@@ -40,7 +41,17 @@ SVG_Element.prototype.rect = function(x, y, width, height, attr) {
     attr.width = width;
     attr.height = height;
 
-    this.children.push(new SVG_Element('rect', attr));
+    return this.addChild('rect', attr);
+};
+
+// A circle element
+// Requires cx, cy, r attributes
+SVG_Element.prototype.circle = function(cx, cy, r, attr) {
+    attr.cx = cx;
+    attr.cy = cy;
+    attr.r = r;
+
+    return this.addChild('circle', attr);
 };
 
 // SVG is a special type of SVG element
