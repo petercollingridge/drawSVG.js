@@ -4,6 +4,9 @@ var defaultSVGAttributes = {
     'xmlns': 'http://www.w3.org/2000/svg'
 };
 
+// Generic SVG element
+// Consists of a tag, an attr and child elements
+
 var SVG_Element = function(tag, attr, children) {
     this.tag = tag;
     this.attr = attr || {};
@@ -68,17 +71,3 @@ SVG.prototype.show = function(selector) {
     // Hack to reload the SVG
     $container.html($container.html());
 };
-
-var testDrawSVG = function(id) {
-    // Create SVG
-    var mySVG = new SVG({ width: 400, height: 200 });
-
-    mySVG.rect(100, 50, 200, 100, { fill: '#88f' });
-    mySVG.rect(100, 50, 50, 50, { fill: '#8ff' });
-
-    mySVG.show('#mySVG');
-}
-
-$(document).ready(function() {
-    testDrawSVG();
-});
