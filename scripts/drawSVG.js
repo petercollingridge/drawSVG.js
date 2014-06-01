@@ -68,7 +68,7 @@ SVG_Element.prototype.ellipse = function(cx, cy, rx, ry, attr) {
     return this.addChild('ellipse', attr);
 };
 
-// An ellipse element
+// A line element
 // Requires x1, y1, x2, y2 attributes
 SVG_Element.prototype.line = function(x1, y1, x2, y2, attr) {
     var attr = attr || {};
@@ -78,6 +78,34 @@ SVG_Element.prototype.line = function(x1, y1, x2, y2, attr) {
     attr.y2 = y2;
 
     return this.addChild('line', attr);
+};
+
+// A polyline element
+// Requires an array of points
+SVG_Element.prototype.polyline = function(points, attr) {
+    var attr = attr || {};
+    attr.points = points.join(" ");
+
+    return this.addChild('polyline', attr);
+};
+
+// A polygon element
+// Requires an array of points
+SVG_Element.prototype.polygon = function(points, attr) {
+    var attr = attr || {};
+    attr.points = points.join(" ");
+
+    return this.addChild('polygon', attr);
+};
+
+// A path element
+// Requires an attritute d
+// See the SVG spec for how this works
+SVG_Element.prototype.path = function(d, attr) {
+    var attr = attr || {};
+    attr.d = d;
+
+    return this.addChild('path', attr);
 };
 
 // SVG is a special type of SVG element

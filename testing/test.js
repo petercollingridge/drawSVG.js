@@ -11,6 +11,10 @@ var testDrawSVG = function(id) {
     myGroup.ellipse(200, 50, 80, 40, { fill: '#f8f' });
     myGroup.line(200, 50, 80, 40, { stroke: '#000' });
 
+    mySVG.polyline([100, 100, 100, 160, 140, 130], { stroke: '#00f', fill: 'none' });
+    mySVG.polygon([150, 100, 150, 160, 190, 130], { stroke: '#00f', fill: 'none' });
+    mySVG.path("M200 100 L200 160 240 130z", { stroke: '#00f', fill: 'none' });
+
     // Render
     mySVG.show('#mySVG');
 }
