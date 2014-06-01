@@ -7,15 +7,17 @@ var defaultSVGAttributes = {
 // Generic SVG element
 // Consists of a tag, an attr and child elements
 
-var SVG_Element = function(tag, attr, children) {
+var SVG_Element = function(tag, attr, contents) {
     this.tag = tag;
     this.attr = attr || {};
-    this.children = children || [];
+    this.contents = contents || "";
+    this.children = [];
 };
 
 SVG_Element.prototype.draw = function(parent) {
     var $element = $('<' + this.tag + '></' + this.tag + '>');
-    $element.attr(this.attr); 
+    $element.attr(this.attr);
+    $element.text(this.contents);
 
     $(this.children).each( function() {
         $element.append(this.draw($element));
@@ -116,6 +118,7 @@ var SVG = function(attr) {
     $.extend(attr, defaultSVGAttributes);
 
     this.children = [];
+    this.styles = {};
 }
 
 SVG.prototype = Object.create(SVG_Element.prototype);
@@ -130,9 +133,42 @@ SVG.prototype.show = function(selector) {
         return;
     }
 
+    if (this.styles) {
+        this.createStyleElement();
+    }
+
     $container.empty();
 
     this.draw($container);
     // Hack to reload the SVG
     $container.html($container.html());
+};
+
+// Create a Style element containing CSS styles
+// TODO: Check user hasn't already created a style element
+SVG.prototype.createStyleElement = function() {
+    var styleString = "";
+
+    for (var selector in this.styles) {
+        if (styleString === "") {
+            styleString += "\n";
+        }
+
+        styleString += selector + "{\n";
+        for (var style in this.styles[selector]) {
+            styleString += "    " + style + ": " + this.styles[selector][style] + ";\n";
+        }
+        styleString += "}\n";
+    }
+
+    var element = new SVG_Element('style', {}, styleString);
+    this.children.unshift(element);
+}
+
+// Add styles to given selector
+// Styles are added with CSS
+SVG.prototype.addStyle = function(selector, styles) {
+    var currentStyle = this.styles[selector] || {};
+    $.extend(styles, currentStyle);
+    this.styles[selector] = styles;
 };

@@ -8,12 +8,14 @@ var testDrawSVG = function(id) {
     // Create a group
     var myGroup = mySVG.addChild('g', { opacity: 0.5 });
     myGroup.circle(80, 100, 70, { fill: '#8ff', onMouseOver: "this.setAttribute('fill', '#f22');" });
-    myGroup.ellipse(280, 100, 100, 70, { fill: '#f8f' });
+    myGroup.ellipse(280, 100, 100, 70);
     myGroup.line(200, 50, 80, 40, { stroke: '#000' });
 
     mySVG.polyline([100, 100, 100, 160, 140, 130], { stroke: '#00f', fill: 'none' });
     mySVG.polygon([150, 100, 150, 160, 190, 130], { stroke: '#00f', fill: 'none' });
     mySVG.path("M200 100 L200 160 240 130z", { stroke: '#00f', fill: 'none' });
+
+    mySVG.addStyle('ellipse', { fill: '#f8f', stroke: '#c4c' });
 
     // Render
     mySVG.show('#mySVG');
