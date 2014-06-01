@@ -13,8 +13,12 @@ var atomData = {
 var MoleculeSVG = function() {
     this.atoms = [];
     this.bonds = [];
-    this.atomSize = 0.16;
+    this.atomSize = 0.2;
+
     this.background = false;
+
+    this.bondColor = '#66666f';
+    this.bondThickness = 0.12;
 };
 
 // Add an array of atoms
@@ -25,8 +29,8 @@ MoleculeSVG.prototype.addAtoms = function(atoms) {
 };
 
 // Add an array of bonds
-MoleculeSVG.prototype.addBonds = function(bond) {
-    this.atoms.concat(bond);
+MoleculeSVG.prototype.addBonds = function(bonds) {
+    this.bonds = this.bonds.concat(bonds);
 };
 
 // Draw the molecule inside the element with the given id
@@ -37,14 +41,20 @@ MoleculeSVG.prototype.draw = function(id) {
 
     // Order atoms and bonds
 
+    // Draw bonds
+    for (var i = 0; i < this.bonds.length; i++) {
+        var bond = this.bonds[i];
+        var atom1 = this.atoms[bond[0]];
+        var atom2 = this.atoms[bond[1]];
+        svg.line(atom1[1], atom1[3], atom2[1], atom2[3], { stroke: this.bondColor, 'stroke-width': this.bondThickness });
+    }
+
     // Draw atoms
     for (var i = 0; i < this.atoms.length; i++) {
         var atom = this.atoms[i];
         var radius = this.atomSize * atomData[atom[0]].size;
         svg.circle(atom[1], atom[3], radius, { fill: atomData[atom[0]].color });
     }
-
-    // Draw bonds
 
     svg.show('#' + id);
 };
