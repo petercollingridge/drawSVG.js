@@ -5,10 +5,19 @@
 	<title>Test drawSVG.js</title>
     <script type="text/javascript" src="../scripts/jquery-1.11.1.min.js"></script>
     <script type="text/javascript" src="../scripts/drawSVG.js"></script>
+    <script type="text/javascript" src="../scripts/drawMolecule.js"></script>
     <script type="text/javascript" src="test.js"></script>
 </head>
 
 <h1>Drawing an SVG</h1>
-<div id="mySVG">X</div>
+<button onclick="testDrawSVG()">Create SVG</button>
+<div></div>
+<div id="mySVG" style="border:1px solid black;padding:5px;display:inline-block">
+	Target div
+</div>
+
+<div id="moleculeSVG" style="border:1px solid #888;width:250px;height:250px">
+	Target div
+</div>
 
 </html>
