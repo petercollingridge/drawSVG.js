@@ -1,13 +1,13 @@
 // Atomic data (atoms have a size and a colour)
 var atomData = {
     H: { name: 'hydrogen', color: '#A2A2A2', size: 1.2 },
-    C: { name: 'carbon', color: ['#3A383A', 230], size: 1.7 },
+    C: { name: 'carbon', color: '#3A383A', size: 1.7 },
     N: { name: 'nitrogen', color: [68, 75, 219, 230], size: 1.55 },
     O: { name: 'oxygen', color: '#E10E0E', size: 1.52 },
-    P: { color: [230, 107, 7, 230], size: 1.8 },
-    S: { color: [200, 180, 20, 230], size: 1.8 },
-    CL: { color: [40, 200, 20, 230], size: 1.6 },
-    FE: { color: [165, 60, 10, 230], size: 2 }
+    P: { name: 'phosphorus', color: '#CF6006', size: 1.8 },
+    S: { name: 'sulfur', color: [200, 180, 20, 230], size: 1.8 },
+    CL: { name: 'chlorine', color: [40, 200, 20, 230], size: 1.6 },
+    FE: { name: 'iron', color: [165, 60, 10, 230], size: 2 }
 };
 
 var MoleculeSVG = function() {
@@ -42,9 +42,8 @@ MoleculeSVG.prototype.addBonds = function(bonds) {
 
 // Draw the molecule inside the element with the given id
 MoleculeSVG.prototype.draw = function(id) {
-    // Calculate viewBox based on maximum extent of atoms
-
-    var svg = new SVG({ viewBox: "-1.5 -1.5 3 3" });
+    // TODO: Calculate viewBox based on maximum extent of atoms
+    var svg = new SVG({ viewBox: "-8 -8 16 16" });
 
     svg.addStyle('.bond', {
         stroke: this.bondColor,
@@ -76,4 +75,49 @@ MoleculeSVG.prototype.draw = function(id) {
     }
 
     svg.show('#' + id);
+};
+
+var parsePDBdata = function(str) {
+    var lines = str.split("\n");
+
+    var molecule = {
+        atoms: [],
+        bonds: []
+    };
+
+    for (var i = 0; i < lines.length; i++) {
+        var data = lines[i].split(/\s+/);
+
+        if (data.length === 12 && data[0] === 'ATOM') {
+            molecule.atoms.push([data[11], parseFloat(data[6]), parseFloat(data[7]), parseFloat(data[8])]);
+        } else if (data.length > 2 && data[0] === 'CONECT') {
+            var atom1 = parseInt(data[1]) - 1;
+
+            for (var j = 2; j < data.length; j++) {
+                var atom2 = parseInt(data[2]) - 1;
+                if (atom1 > atom2) {
+                    molecule.bonds.push([atom1, atom2]);
+                }
+            }
+        }
+    }
+
+    return molecule;
+};
+
+var drawPDBMolecule = function(id) {
+    var dataBox = $('#' + id);
+
+    if (!dataBox){
+        console.log("No element found with id: " + id + "");
+        return;
+    }
+
+    var data = dataBox.text();
+    var moleculeData = parsePDBdata(data);
+
+    var molecule = new MoleculeSVG();
+    molecule.addAtoms(moleculeData.atoms);
+    molecule.addBonds(moleculeData.bonds);
+    molecule.draw('moleculeSVG');
 };

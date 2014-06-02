@@ -16,7 +16,106 @@
 	Target div
 </div>
 
-<div id="moleculeSVG" style="border:1px solid #888;width:250px;height:250px">
+<h2>Molecule drawer</h2>
+<button onclick="drawPDBMolecule('molecule-data')">Show molecule</button><br>
+<textarea id="molecule-data" style="border:1px solid #888;width:700px;height:300px;display:inline-block">
+ATOM      1  PG  ATP A   1       1.200  -0.226  -6.850  1.00 10.00           P
+ATOM      2  O1G ATP A   1       1.740   1.140  -6.672  1.00 10.00           O
+ATOM      3  O2G ATP A   1       2.123  -1.036  -7.891  1.00 10.00           O
+ATOM      4  O3G ATP A   1      -0.302  -0.139  -7.421  1.00 10.00           O
+ATOM      5  PB  ATP A   1       0.255  -0.130  -4.446  1.00 10.00           P
+ATOM      6  O1B ATP A   1       0.810   1.234  -4.304  1.00 10.00           O
+ATOM      7  O2B ATP A   1      -1.231  -0.044  -5.057  1.00 10.00           O
+ATOM      8  O3B ATP A   1       1.192  -0.990  -5.433  1.00 10.00           O
+ATOM      9  PA  ATP A   1      -0.745   0.068  -2.071  1.00 10.00           P
+ATOM     10  O1A ATP A   1      -2.097   0.143  -2.669  1.00 10.00           O
+ATOM     11  O2A ATP A   1      -0.125   1.549  -1.957  1.00 10.00           O
+ATOM     12  O3A ATP A   1       0.203  -0.840  -3.002  1.00 10.00           O
+ATOM     13  O5' ATP A   1      -0.844  -0.587  -0.604  1.00 10.00           O
+ATOM     14  C5' ATP A   1      -1.694   0.260   0.170  1.00 10.00           C
+ATOM     15  C4' ATP A   1      -1.831  -0.309   1.584  1.00 10.00           C
+ATOM     16  O4' ATP A   1      -0.542  -0.355   2.234  1.00 10.00           O
+ATOM     17  C3' ATP A   1      -2.683   0.630   2.465  1.00 10.00           C
+ATOM     18  O3' ATP A   1      -4.033   0.165   2.534  1.00 10.00           O
+ATOM     19  C2' ATP A   1      -2.011   0.555   3.856  1.00 10.00           C
+ATOM     20  O2' ATP A   1      -2.926   0.043   4.827  1.00 10.00           O
+ATOM     21  C1' ATP A   1      -0.830  -0.418   3.647  1.00 10.00           C
+ATOM     22  N9  ATP A   1       0.332   0.015   4.425  1.00 10.00           N
+ATOM     23  C8  ATP A   1       1.302   0.879   4.012  1.00 10.00           C
+ATOM     24  N7  ATP A   1       2.184   1.042   4.955  1.00 10.00           N
+ATOM     25  C5  ATP A   1       1.833   0.300   6.033  1.00 10.00           C
+ATOM     26  C6  ATP A   1       2.391   0.077   7.303  1.00 10.00           C
+ATOM     27  N6  ATP A   1       3.564   0.706   7.681  1.00 10.00           N
+ATOM     28  N1  ATP A   1       1.763  -0.747   8.135  1.00 10.00           N
+ATOM     29  C2  ATP A   1       0.644  -1.352   7.783  1.00 10.00           C
+ATOM     30  N3  ATP A   1       0.088  -1.178   6.602  1.00 10.00           N
+ATOM     31  C4  ATP A   1       0.644  -0.371   5.704  1.00 10.00           C
+ATOM     32 HOG2 ATP A   1       2.100  -0.546  -8.725  1.00 10.00           H
+ATOM     33 HOG3 ATP A   1      -0.616  -1.048  -7.522  1.00 10.00           H
+ATOM     34 HOB2 ATP A   1      -1.554  -0.952  -5.132  1.00 10.00           H
+ATOM     35 HOA2 ATP A   1       0.752   1.455  -1.563  1.00 10.00           H
+ATOM     36 H5'1 ATP A   1      -2.678   0.312  -0.296  1.00 10.00           H
+ATOM     37 H5'2 ATP A   1      -1.263   1.259   0.221  1.00 10.00           H
+ATOM     38  H4' ATP A   1      -2.275  -1.304   1.550  1.00 10.00           H
+ATOM     39  H3' ATP A   1      -2.651   1.649   2.078  1.00 10.00           H
+ATOM     40 HO3' ATP A   1      -4.515   0.788   3.094  1.00 10.00           H
+ATOM     41  H2' ATP A   1      -1.646   1.537   4.157  1.00 10.00           H
+ATOM     42 HO2' ATP A   1      -3.667   0.662   4.867  1.00 10.00           H
+ATOM     43  H1' ATP A   1      -1.119  -1.430   3.931  1.00 10.00           H
+ATOM     44  H8  ATP A   1       1.334   1.357   3.044  1.00 10.00           H
+ATOM     45 HN61 ATP A   1       3.938   0.548   8.562  1.00 10.00           H
+ATOM     46 HN62 ATP A   1       4.015   1.303   7.064  1.00 10.00           H
+ATOM     47  H2  ATP A   1       0.166  -2.014   8.490  1.00 10.00           H
+CONECT    1    2    3    4    8
+CONECT    2    1
+CONECT    3    1   32
+CONECT    4    1   33
+CONECT    5    6    7    8   12
+CONECT    6    5
+CONECT    7    5   34
+CONECT    8    1    5
+CONECT    9   10   11   12   13
+CONECT   10    9
+CONECT   11    9   35
+CONECT   12    5    9
+CONECT   13    9   14
+CONECT   14   13   15   36   37
+CONECT   15   14   16   17   38
+CONECT   16   15   21
+CONECT   17   15   18   19   39
+CONECT   18   17   40
+CONECT   19   17   20   21   41
+CONECT   20   19   42
+CONECT   21   16   19   22   43
+CONECT   22   21   23   31
+CONECT   23   22   24   44
+CONECT   24   23   25
+CONECT   25   24   26   31
+CONECT   26   25   27   28
+CONECT   27   26   45   46
+CONECT   28   26   29
+CONECT   29   28   30   47
+CONECT   30   29   31
+CONECT   31   22   25   30
+CONECT   32    3
+CONECT   33    4
+CONECT   34    7
+CONECT   35   11
+CONECT   36   14
+CONECT   37   14
+CONECT   38   15
+CONECT   39   17
+CONECT   40   18
+CONECT   41   19
+CONECT   42   20
+CONECT   43   21
+CONECT   44   23
+CONECT   45   27
+CONECT   46   27
+CONECT   47   29
+END
+</textarea>
+<div id="moleculeSVG" style="border:1px solid #888;width:300px;height:300px;display:inline-block">
 	Target div
 </div>
 
