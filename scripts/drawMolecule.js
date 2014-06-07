@@ -2,7 +2,7 @@
 var atomData = {
     H: { name: 'hydrogen', color: '#A2A2A2', size: 1.2 },
     C: { name: 'carbon', color: '#3A383A', size: 1.7 },
-    N: { name: 'nitrogen', color: [68, 75, 219, 230], size: 1.55 },
+    N: { name: 'nitrogen', color: '#3D44C6', size: 1.55 },
     O: { name: 'oxygen', color: '#E10E0E', size: 1.52 },
     P: { name: 'phosphorus', color: '#CF6006', size: 1.8 },
     S: { name: 'sulfur', color: [200, 180, 20, 230], size: 1.8 },
@@ -43,7 +43,7 @@ MoleculeSVG.prototype.addBonds = function(bonds) {
 // Draw the molecule inside the element with the given id
 MoleculeSVG.prototype.draw = function(id) {
     // TODO: Calculate viewBox based on maximum extent of atoms
-    var svg = new SVG({ viewBox: "-8 -8 16 16" });
+    var svg = new SVG({ viewBox: "-10 -10 20 20" });
 
     svg.addStyle('.bond', {
         stroke: this.bondColor,
@@ -57,24 +57,63 @@ MoleculeSVG.prototype.draw = function(id) {
         });
     }
 
-    // Order atoms and bonds
+    // TODO: Order atoms and bonds
 
     // Draw bonds
     for (var i = 0; i < this.bonds.length; i++) {
         var bond = this.bonds[i];
         var atom1 = this.atoms[bond[0]];
         var atom2 = this.atoms[bond[1]];
-        svg.line(atom1[1], atom1[3], atom2[1], atom2[3], { class: 'bond' });
+        svg.line(atom1[1], atom1[2], atom2[1], atom2[2], { class: 'bond' });
     }
 
     // Draw atoms
     for (var i = 0; i < this.atoms.length; i++) {
         var atom = this.atoms[i];
         var radius = this.atomSize * atomData[atom[0]].size;
-        svg.circle(atom[1], atom[3], radius, { class: atomData[atom[0]].name });
+        svg.circle(atom[1], atom[2], radius, { class: atomData[atom[0]].name });
     }
 
     svg.show('#' + id);
+};
+
+MoleculeSVG.prototype.rotateX = function(theta) {
+    var ct = Math.cos(theta);
+    var st = Math.sin(theta);
+
+    var i, y, z;
+    for (i = 0; i < this.atoms.length; i++) {
+        y = this.atoms[i][2];
+        z = this.atoms[i][3];
+        this.atoms[i][2] = ct * y - st * z;
+        this.atoms[i][3] = st * y + ct * z;
+    }
+};
+
+MoleculeSVG.prototype.rotateY = function(theta) {
+    var ct = Math.cos(theta);
+    var st = Math.sin(theta);
+
+    var i, x, z;
+    for (i = 0; i < this.atoms.length; i++) {
+        x = this.atoms[i][1];
+        z = this.atoms[i][3];
+        this.atoms[i][1] =  ct * x + st * z;
+        this.atoms[i][3] = -st * x + ct * z;
+    }
+};
+
+MoleculeSVG.prototype.rotateZ = function(theta) {
+    var ct = Math.cos(theta);
+    var st = Math.sin(theta);
+
+    var i, x, y;
+    for (i = 0; i < this.atoms.length; i++) {
+        x = this.atoms[i][1];
+        y = this.atoms[i][2];
+        this.atoms[i][1] = ct * x - st * y;
+        this.atoms[i][2] = st * x + ct * y;
+    }
 };
 
 var parsePDBdata = function(str) {
@@ -94,7 +133,7 @@ var parsePDBdata = function(str) {
             var atom1 = parseInt(data[1]) - 1;
 
             for (var j = 2; j < data.length; j++) {
-                var atom2 = parseInt(data[2]) - 1;
+                var atom2 = parseInt(data[j]) - 1;
                 if (atom1 > atom2) {
                     molecule.bonds.push([atom1, atom2]);
                 }
@@ -109,7 +148,7 @@ var drawPDBMolecule = function(id) {
     var dataBox = $('#' + id);
 
     if (!dataBox){
-        console.log("No element found with id: " + id + "");
+        console.log("No element found with id: " + id);
         return;
     }
 

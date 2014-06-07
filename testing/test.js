@@ -33,6 +33,8 @@ var testMolecule = function() {
     // Create a bond between atoms 0 and 1, and between atoms 0 and 2
     water.addBonds([[0, 1], [0, 2]]);
 
+    water.rotateX(Math.PI / 2);
+    water.rotateZ(Math.PI / 2);
     water.draw('moleculeSVG');
 };
 
