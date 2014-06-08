@@ -113,25 +113,35 @@ MoleculeSVG.prototype.findBoundingBox = function() {
     return bounds;  
 };
 
+// Rotate molecule to look show as much as poosible
+// Currently finds the dimensions with the greatest extents and makes them x and y
+// TODO Use PCA to find plane of molecule and rotate to show that face on
+MoleculeSVG.prototype.autoRotate = function() {
+    var bounds = this.findBoundingBox();
+    var dx = bounds[1] - bounds[0];
+    var dy = bounds[3] - bounds[2];
+    var dz = bounds[5] - bounds[4];
+    
+    if (dz > dx) { this.rotateY(Math.PI / 2); }
+    if (dz > dy) { this.rotateX(Math.PI / 2); }
+};
+
 // Assuming a square image for now
 MoleculeSVG.prototype.findViewBox = function() {
     var bounds = this.findBoundingBox();
     var width  = bounds[1] - bounds[0];
     var height = bounds[3] - bounds[2];
-    
-    var x = bounds[0]; 
-    var y = bounds[2];
-    var extent;
+    var x, y, extent;
 
     if (width > height) {
         var border = width * this.border;
-        x -= 0.5 * border;
-        y -= 0.5 * (border + width - height);
+        x = bounds[0] - 0.5 * border;
+        y = bounds[2] - 0.5 * (border + width - height);
         extent = width + border;
     } else {
         var border = height * this.border;
-        x -= 0.5 * (border + height - width);
-        y -= 0.5 * border;
+        x = bounds[0] - 0.5 * (border + height - width);
+        y = bounds[2] - 0.5 * border;
         extent = height + border;
     }
 
@@ -219,5 +229,6 @@ var drawPDBMolecule = function(id) {
     var molecule = new MoleculeSVG();
     molecule.addAtoms(moleculeData.atoms);
     molecule.addBonds(moleculeData.bonds);
+    molecule.autoRotate();
     molecule.draw('moleculeSVG');
 };
