@@ -13,18 +13,18 @@ var atomData = {
 var MoleculeSVG = function() {
     this.atoms = [];
     this.bonds = [];
-    this.atomSize = 0.2;
     this.atomTypes = {};
 
     this.background = false;
+    this.border = 0.05; // As a percentage of the molecule's size
 
+    this.atomSize = 0.2;
     this.bondColor = '#66666f';
     this.bondThickness = 0.12;
 };
 
 // Add an array of atoms
-// Atoms should be an array of the atom type (e.g. 'O' for oxygen),
-// followed by the x, y, z components
+// Atoms should be an array of the atom type (e.g. 'O' for oxygen), followed by the x, y, z components
 MoleculeSVG.prototype.addAtoms = function(atoms) {
     for (var i = 0; i < atoms.length; i++) {
         this.atoms.push(atoms[i]);
@@ -38,43 +38,6 @@ MoleculeSVG.prototype.addAtoms = function(atoms) {
 // Add an array of bonds
 MoleculeSVG.prototype.addBonds = function(bonds) {
     this.bonds = this.bonds.concat(bonds);
-};
-
-// Draw the molecule inside the element with the given id
-MoleculeSVG.prototype.draw = function(id) {
-    // TODO: Calculate viewBox based on maximum extent of atoms
-    var svg = new SVG({ viewBox: "-10 -10 20 20" });
-
-    svg.addStyle('.bond', {
-        stroke: this.bondColor,
-        'stroke-width': this.bondThickness
-    });
-
-    // Style atoms
-    for (var atomType in this.atomTypes) {
-        svg.addStyle('.' + atomData[atomType].name, {
-            fill: atomData[atomType].color
-        });
-    }
-
-    // TODO: Order atoms and bonds
-
-    // Draw bonds
-    for (var i = 0; i < this.bonds.length; i++) {
-        var bond = this.bonds[i];
-        var atom1 = this.atoms[bond[0]];
-        var atom2 = this.atoms[bond[1]];
-        svg.line(atom1[1], atom1[2], atom2[1], atom2[2], { class: 'bond' });
-    }
-
-    // Draw atoms
-    for (var i = 0; i < this.atoms.length; i++) {
-        var atom = this.atoms[i];
-        var radius = this.atomSize * atomData[atom[0]].size;
-        svg.circle(atom[1], atom[2], radius, { class: atomData[atom[0]].name });
-    }
-
-    svg.show('#' + id);
 };
 
 MoleculeSVG.prototype.rotateX = function(theta) {
@@ -114,6 +77,104 @@ MoleculeSVG.prototype.rotateZ = function(theta) {
         this.atoms[i][1] = ct * x - st * y;
         this.atoms[i][2] = st * x + ct * y;
     }
+};
+
+// Find the min and max value for the x, y and z coordinates of the molecule
+// Return an array [minX, maxX, minY, maxY, minZ, maxZ]
+// TODO Improve this - use object for atoms
+MoleculeSVG.prototype.findBoundingBox = function() {
+    var bounds = [0, 1, 0, 1, 0, 1];
+
+    if (this.atoms.length > 0) {
+        var atom = this.atoms[0];
+        var r = atomData[atom[0]].size * this.atomSize;
+        bounds = [
+            atom[1] - r, atom[1] + r,
+            atom[2] - r, atom[2] + r,
+            atom[3] - r, atom[3] + r
+        ];
+
+        for (var i = 1; i < this.atoms.length; i++) {
+            var atom = this.atoms[i];
+            var r = atomData[atom[0]].size * this.atomSize;
+
+            for (var c = 0; c < 3; c++) {
+                var minValue = atom[c + 1] - r;
+                var maxValue = atom[c + 1] + r;
+                if (minValue < bounds[c * 2]) {
+                    bounds[c * 2] = minValue;
+                } else if (maxValue > bounds[c * 2 + 1]) {
+                    bounds[c * 2 + 1] = maxValue;
+                }
+            }
+        }
+    }
+
+    return bounds;  
+};
+
+// Assuming a square image for now
+MoleculeSVG.prototype.findViewBox = function() {
+    var bounds = this.findBoundingBox();
+    var width  = bounds[1] - bounds[0];
+    var height = bounds[3] - bounds[2];
+    
+    var x = bounds[0]; 
+    var y = bounds[2];
+    var extent;
+
+    if (width > height) {
+        var border = width * this.border;
+        x -= 0.5 * border;
+        y -= 0.5 * (border + width - height);
+        extent = width + border;
+    } else {
+        var border = height * this.border;
+        x -= 0.5 * (border + height - width);
+        y -= 0.5 * border;
+        extent = height + border;
+    }
+
+    return x + " " + y + " " + extent + " " + extent;
+};
+
+// Draw the molecule inside the element with the given id
+MoleculeSVG.prototype.draw = function(id) {
+    // Calculate the extent of the molecule so it fills the screen
+    var bounds = this.findBoundingBox();
+    var svg = new SVG({ viewBox: this.findViewBox() });
+
+    svg.addStyle('.bond', {
+        'stroke': this.bondColor,
+        'stroke-width': this.bondThickness
+    });
+
+    // Add a style for all atom types in the molecule
+    for (var atomType in this.atomTypes) {
+        svg.addStyle('.' + atomData[atomType].name, {
+            fill: atomData[atomType].color
+        });
+    }
+
+    // TODO: Order atoms and bonds
+
+    // Draw bonds
+    for (var i = 0; i < this.bonds.length; i++) {
+        var bond = this.bonds[i];
+        var atom1 = this.atoms[bond[0]];
+        var atom2 = this.atoms[bond[1]];
+        svg.line(atom1[1], atom1[2], atom2[1], atom2[2], { class: 'bond' });
+    }
+
+    // Draw atoms
+    for (var i = 0; i < this.atoms.length; i++) {
+        var atom = this.atoms[i];
+        var radius = this.atomSize * atomData[atom[0]].size;
+        svg.circle(atom[1], atom[2], radius, { class: atomData[atom[0]].name });
+        //svg.circle(atom[1], atom[2], radius*0.1, {  });
+    }
+
+    svg.show('#' + id);
 };
 
 var parsePDBdata = function(str) {

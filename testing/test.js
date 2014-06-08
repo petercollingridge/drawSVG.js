@@ -34,7 +34,7 @@ var testMolecule = function() {
     water.addBonds([[0, 1], [0, 2]]);
 
     water.rotateX(Math.PI / 2);
-    water.rotateZ(Math.PI / 2);
+    //water.rotateZ(Math.PI / 2);
     water.draw('moleculeSVG');
 };
 
