@@ -7,7 +7,7 @@ var testDrawSVG = function(id) {
 
     // Create a group
     var myGroup = mySVG.addChild('g', { opacity: 0.5 });
-    myGroup.circle(80, 100, 70, { fill: '#8ff', onMouseOver: "this.setAttribute('fill', '#f22');" });
+    myGroup.circle(80, 100, 70, { fill: '#8ff', onMouseOver: "this.setAttributeNS('fill', '#f22');" });
     myGroup.ellipse(280, 100, 100, 70);
     myGroup.line(200, 50, 80, 40, { stroke: '#000' });
 
@@ -18,7 +18,7 @@ var testDrawSVG = function(id) {
     mySVG.addStyle('ellipse', { fill: '#f8f', stroke: '#c4c' });
 
     // Render
-    mySVG.show('#mySVG');
+    mySVG.show('mySVG');
 };
 
 var testMolecule = function() {
@@ -38,6 +38,4 @@ var testMolecule = function() {
     water.draw('moleculeSVG');
 };
 
-$(document).ready(function() {
-    testMolecule();
-});
+window.onload = testMolecule;

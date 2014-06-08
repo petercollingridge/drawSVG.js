@@ -184,7 +184,7 @@ MoleculeSVG.prototype.draw = function(id) {
         //svg.circle(atom[1], atom[2], radius*0.1, {  });
     }
 
-    svg.show('#' + id);
+    svg.show(id);
 };
 
 var parsePDBdata = function(str) {
@@ -216,14 +216,14 @@ var parsePDBdata = function(str) {
 };
 
 var drawPDBMolecule = function(id) {
-    var dataBox = $('#' + id);
+    var dataBox = document.getElementById(id);
 
     if (!dataBox){
         console.log("No element found with id: " + id);
         return;
     }
 
-    var data = dataBox.text();
+    var data = dataBox.value;
     var moleculeData = parsePDBdata(data);
 
     var molecule = new MoleculeSVG();
